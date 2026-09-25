@@ -142,6 +142,14 @@ function Home() {
     return map;
   }, [items]);
 
+  const availableCategories = useMemo(() => {
+    const set = new Set(TEMPLATE_CATEGORIES);
+    for (const item of items) {
+      if (item.category) set.add(item.category);
+    }
+    return Array.from(set);
+  }, [items]);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((t) => {
@@ -185,7 +193,7 @@ function Home() {
       setQuery('');
       setActiveCategory('All');
       setVisibleCount(PAGE_SIZE);
-      showToast('Restored the 200 default templates');
+      showToast(`Restored default templates (${seedTemplates.length})`);
     }
     setConfirm(null);
   }
@@ -259,7 +267,7 @@ function Home() {
             >
               All<span className="tpb-chip-count">{items.length}</span>
             </button>
-            {TEMPLATE_CATEGORIES.map((cat) => {
+            {availableCategories.map((cat) => {
               const n = counts.get(cat) ?? 0;
               if (n === 0) return null;
               return (
@@ -377,7 +385,7 @@ function Home() {
             className="tpb-linkbtn"
             onClick={() => setConfirm({ kind: 'reset', id: '', label: 'all templates' })}
           >
-            Restore 200 defaults
+            Restore default templates ({seedTemplates.length})
           </button>
         </footer>
       </div>
@@ -418,13 +426,13 @@ function Home() {
               <select
                 id="tpb-field-category"
                 className="tpb-select"
-                value={TEMPLATE_CATEGORIES.includes(modal.category) ? modal.category : 'Custom'}
+                value={availableCategories.includes(modal.category) ? modal.category : 'Custom'}
                 onChange={(e) => setModal({ ...modal, category: e.target.value })}
               >
-                {TEMPLATE_CATEGORIES.map((c) => (
+                {availableCategories.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
-                {!TEMPLATE_CATEGORIES.includes(modal.category) && (
+                {!availableCategories.includes(modal.category) && (
                   <option value="Custom">{modal.category || 'Custom'}</option>
                 )}
               </select>
@@ -467,7 +475,7 @@ function Home() {
             <p className="tpb-modal-sub" id="tpb-confirm-desc">
               {confirm.kind === 'delete'
                 ? `"${confirm.label}" will be removed from this browser. This cannot be undone.`
-                : 'Your current list will be replaced with the 200 default templates.'}
+                : `Your current list will be replaced with the ${seedTemplates.length} default templates.`}
             </p>
             <div className="tpb-modal-actions">
               <button type="button" className="tpb-btn tpb-btn-ghost" onClick={() => setConfirm(null)}>

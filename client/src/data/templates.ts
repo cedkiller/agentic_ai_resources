@@ -18,6 +18,20 @@ export const TEMPLATE_CATEGORIES: string[] = [
   "Business & Marketing",
   "Career, Education & Productivity",
   "Advanced / Professional",
+  "IT Department",
+  "TESTING Department",
+  "CONSULTING Department",
+  "HR Department",
+  "FINANCE Department",
+  "SALES Department",
+  "Safety Training Department",
+  "IH Department",
+  "IH LAB Department",
+  "ESH Department",
+  "IMS Department",
+  "MARKETING Department",
+  "ERT Department",
+  "ADMIN Department",
 ];
 
 export const seedTemplates: TemplateItem[] = [

@@ -28,7 +28,9 @@ function loadInitialItems(): TemplateItem[] {
         typeof (t as TemplateItem).content === "string" &&
         typeof (t as TemplateItem).category === "string"
     );
-    return valid;
+    const existingIds = new Set(valid.map((item) => item.id));
+    const missingSeeds = seedTemplates.filter((seed) => !existingIds.has(seed.id));
+    return [...valid, ...missingSeeds];
   } catch {
     return seedTemplates;
   }
